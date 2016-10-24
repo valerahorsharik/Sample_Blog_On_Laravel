@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth',['except' => 'index']);
     }
     
     public function index()
@@ -32,6 +32,12 @@ class PostController extends Controller
         return view('posts.add');
     }
     
+    public function show($id) {
+        
+        $post = Post::find($id);
+        return view('posts.show',['post'=> $post]);
+        
+    }
     public function store(Request $request)
     {
     

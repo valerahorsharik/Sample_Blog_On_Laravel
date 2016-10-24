@@ -8,10 +8,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!--<title>{{ config('app.name', 'Laravel') }}</title>-->
+    <title>@yield('title')</title>
 
     <!-- Styles -->
-    <link href="public/css/app.css" rel="stylesheet">
+    <link href="/public/css/app.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -53,12 +54,17 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
+                            <li><a href="{{url('/posts')}}">Home</a></li>
+                            <li><a href="{{url('/posts/add')}}">Add post</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{url('/profile')}}">Profile</a>
+                                    </li>
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();
@@ -82,6 +88,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="public/js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/public/js/app.js"></script>
+    @yield('scripts')
 </body>
 </html>

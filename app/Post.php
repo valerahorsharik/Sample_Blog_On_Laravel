@@ -12,7 +12,7 @@ class Post extends Model
     ];
     
     public function user() {
-        //123
+        
         return $this->belongsTo(User::class);
         
     }

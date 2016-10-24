@@ -11,16 +11,17 @@
   |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', ['uses'=>'PostController@index' , 'as'=>'post.index']);
 
 // Article Routes...
 Route::get('/posts',['uses'=>'PostController@index' , 'as'=>'post.index']);
 Route::get('/posts/add',['uses'=>'PostController@add' , 'as'=>'post.add']);
 Route::post('/post',['uses'=>'PostController@store', 'as'=>'post.store']);
-Route::get('/posts/{id}',['uses'=>'PostController@show','as'=>'post.show']);
+Route::get('/posts/{id}',['uses'=>'PostController@show', 'middleware' => 'role','as'=>'post.show']);
 
+// User Routes...
+Route::get('/profile',['uses'=>'UserController@index','as'=>'user.index']);
+Route::put('/profile/bdate/',['uses'=>'UserController@bdayUpdate','as'=>'user.bday']);
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
