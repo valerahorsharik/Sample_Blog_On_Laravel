@@ -23,13 +23,16 @@ class UserController extends Controller {
             , 'December',];
         return view('user.index', ['user' => $user,
             'months' => $months,
-            'date'=>$date,
-            ]);
+            'date' => $date,
+        ]);
     }
 
     public function updateBirthDate(Request $request) {
-        $birthDate = $request->year. '-' . $request->month . '-' .$request->day;      
-        Auth::user()->birth_date = $birthDate;
+        if (isset($request->year) && isset($request->month) && isset($request->day)) {
+            $birthDate = $request->year . '-' . $request->month . '-' . $request->day;
+            Auth::user()->birth_date = $birthDate;
+        }
+
         Auth::user()->save();
     }
 
