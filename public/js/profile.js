@@ -25,7 +25,7 @@ $(document).ready(function () {
             $('select[name="b-day"]').append('<option value="' + i + '">' + i + '</option>');
         }
     }
-    
+
     /*
      * generate amout of days depends on current month/year on date change
      */
@@ -43,7 +43,22 @@ $(document).ready(function () {
             }
         }
     });
-    function updateEveryThing() {
+    /*
+     * set timer for auto update on any .data change
+     * and add to the data current changed value
+     */
+    var timerId = 0;
+    $('.data').on('change', function () {
+        data[$(this).parent().attr('id')] = $(this).val();
+        clearTimeout(timerId);
+        timerId = setTimeout(update, 5000);
+    });
+    
+    /*
+     * Send ajax request for update user profile
+     */
+
+    function update() {
         console.log(data);
         $.ajaxSetup({
             headers: {
@@ -52,17 +67,12 @@ $(document).ready(function () {
         });
         $.ajax({
             type: "PUT",
-            url: "/profile/bdate/",
+            url: "/profile/update/",
             data: data,
             success: function () {
                 $('#message-profile').html('Success');
             }
         });
     }
-    var timerId = 0;
-    $('.data').on('change', function () {
-        data[$(this).parent().attr('id')] = $(this).val();
-        clearTimeout(timerId);
-        timerId = setTimeout(updateEveryThing, 5000);
-    });
+
 });
