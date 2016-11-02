@@ -21,7 +21,7 @@ Route::get('/posts/{id}',['uses'=>'PostController@show', 'as'=>'post.show']);
 
 // User Routes...
 Route::get('/profile',['uses'=>'UserController@index','as'=>'user.index']);
-Route::put('/profile/bdate/',['uses'=>'UserController@updateBirthDate','as'=>'user.bdate']);
+Route::put('/profile/update/',['uses'=>'UserController@update','as'=>'user.update']);
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
