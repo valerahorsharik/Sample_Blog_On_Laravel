@@ -30,4 +30,28 @@ class User extends Authenticatable
     public function posts(){
         return $this->hasMany(Post::class);
     }
+    
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+    
+    /**
+     * Set the user's name.
+     * 
+     * @param type $name string
+     * @return void
+     */
+    public function setNameAttribute($name){
+        $this->attributes['name'] = ucfirst(strtolower($name));
+    }
+    
+    /**
+     * Set the user's surname.
+     * 
+     * @param type $surname string
+     * @return void
+     */
+    public function setSurnameAttribute($surname){
+        $this->attributes['surname'] = ucfirst(strtolower($surname));
+    }
 }
