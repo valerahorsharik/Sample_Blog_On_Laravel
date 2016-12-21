@@ -1,0 +1,12 @@
+.post{
+    border-bottom: 1px solid #eee;
+}
+.post .row {
+    margin-left: 0px;
+}
+.options {
+    padding-left: 0px;
+}
+.post{
+    word-wrap: break-word;
+}
