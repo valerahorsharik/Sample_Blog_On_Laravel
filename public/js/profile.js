@@ -30,13 +30,14 @@ $(document).ready(function () {
      * generate amout of days depends on current month/year on date change
      */
     $('#b-date').on('change', function () {
-        data['year'] = $('select[name="b-year"] option:selected').attr('value');
-        data['month'] = $('select[name="b-month"] option:selected').attr('value');
-        data['day'] = $('select[name="b-day"] option:selected').attr('value');
-        var days = new Date().daysInMonth(data['year'], data['month']);
+        var year = $('select[name="b-year"] option:selected').attr('value');
+        var month = $('select[name="b-month"] option:selected').attr('value');
+        var day = $('select[name="b-day"] option:selected').attr('value');
+        data['birth_date'] = year + "-" + month + "-" + day;
+        var days = new Date().daysInMonth(year, month);
         $('select[name="b-day"] option').remove();
         for (var i = 1; i <= days; i++) {
-            if (i == data['day']) {
+            if (i == day) {
                 $('select[name="b-day"]').append('<option value="' + i + '" selected>' + i + '</option>');
             } else {
                 $('select[name="b-day"]').append('<option value="' + i + '">' + i + '</option>');
@@ -53,13 +54,39 @@ $(document).ready(function () {
         clearTimeout(timerId);
         timerId = setTimeout(update, 5000);
     });
-    
+
+
+        /*
+         * uploading image
+         */
+//    $('form').on('submit', function () {
+////        $('form').submit();
+//        var avatar = new FormData($('form'));
+//        console.log(avatar);
+//         $.ajaxSetup({
+//            headers: {
+//                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//            }
+//        });
+//        $.ajax({
+//            type: "POST",
+//            url: "/profile/update/",
+//            data: avatar,
+//            processData: false,
+////            contentType: false,
+//            success: function (data) {
+//                $('#message-profile').html(data);
+//            }
+//        })
+//        return false;
+//    })
+
     /*
      * Send ajax request for update user profile
      */
-
+    var elementsWithError = {};
     function update() {
-        console.log(data);
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -69,8 +96,43 @@ $(document).ready(function () {
             type: "PUT",
             url: "/profile/update/",
             data: data,
-            success: function () {
-                $('#message-profile').html('Success');
+            
+//            statusCode: {
+//                200: function (data) {
+//                    $('#message-profile').html(data);
+//                    for (var element in elementsWithError) {
+//                        $("#" + element + ">input").removeClass("error");
+//                    }
+//                },
+//                422: function (data) {
+//                    elementsWithError = JSON.parse(data.responseText);
+//                    console.log(data);
+//                    var erros = '';
+//                    for (var element in elementsWithError) {
+//                        $("#" + element + ">input").addClass("error");
+//
+//                    }
+//                    $('#message-profile').html(erros);
+//                },
+//                404: function (data) {
+//                    console.log(data);
+//                    $('#message-profile').html(data);
+//                }
+//            },
+            error: function (data) {
+                elementsWithError = JSON.parse(data.responseText);
+//                var erros = '';
+                for (var element in elementsWithError) {
+                    $("#" + element + ">input").addClass("error");
+
+                }
+//                $('#message-profile').html(erros);
+            },
+            success: function (data) {
+                for (var element in elementsWithError) {
+                    $("#" + element + ">input").removeClass("error");
+                }
+                $('#message-profile').html(data);
             }
         });
     }
