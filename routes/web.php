@@ -14,14 +14,18 @@
 Route::get('/', ['uses'=>'PostController@index' , 'as'=>'post.index']);
 
 // Article Routes...
-Route::get('/posts',['uses'=>'PostController@index' , 'as'=>'post.index']);
 Route::get('/posts/add',['uses'=>'PostController@add' , 'as'=>'post.add']);
-Route::post('/post',['uses'=>'PostController@store', 'as'=>'post.store']);
-Route::get('/posts/{id}',['uses'=>'PostController@show', 'as'=>'post.show']);
+Route::get('/posts/{nickName?}',['uses'=>'PostController@index' , 'as'=>'post.index']);
+Route::post('/post/',['uses'=>'PostController@store', 'as'=>'post.store']);
+Route::get('/post/{id}',['uses'=>'PostController@show', 'as'=>'post.show']);
+Route::get('/post/delete/{id}',['uses'=>'PostController@delete', 'as' => 'post.delete']);
+
 
 // User Routes...
-Route::get('/profile',['uses'=>'UserController@index','as'=>'user.index']);
+Route::get('/profile/',['uses'=>'UserController@index','as'=>'user.index']);
+Route::get('/profile/{nickName}/',['uses'=>'UserController@show','as'=>'user.show']);
 Route::put('/profile/update/',['uses'=>'UserController@update','as'=>'user.update']);
+//Route::post('/profile/update/',['uses'=>'UserController@update','as'=>'user.update']);
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
