@@ -3,55 +3,181 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\User;
 use App\Post;
-class PostController extends Controller
-{
+use App\Comment;
+use \Illuminate\Support\Facades\Auth;
+use \Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+class PostController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth',['except' => 'index']);
+    public function __construct() {
+        $this->middleware('auth', ['except' => 'index']);
     }
-    
-    public function index()
-    {
-        $posts = Post::all();
-        return view('posts.index',
-        [
-            'posts'=>$posts,
+
+    /**
+     * Show all posts if $nickName is null ,
+     * and otherwise show all posts which belongs
+     * to the user with $nickName.
+     * 
+     * @param string $nickName
+     * @return \Illuminate\Http\Response
+     * 
+     * @throws NotFoundHttpException
+     */
+    public function index($nickName = null) {
+        if (isset($nickName)) {
+            try {
+                $posts = User::where('nick_name', $nickName)->first()->posts;
+                return view('posts.index', [
+                    'posts' => $posts,
+                ]);
+            } catch (\ErrorException $ex) {
+                throw new NotFoundHttpException('No such user!');
+            }
+        }
+        $posts = Post::all()
+                ->where('deleted',0)
+                ->sortByDesc('id');
+        $posts= DB::table('posts')
+//                ->select(DB::raw('posts.*, count(comments.id)'))
+//                ->from('posts')
+                ->join('comments','posts.id','=','comments.post_id')
+                ->select(DB::raw('`posts`.*, count(`comments`.`id`) as comments_count,comments.post_id'))
+//                ->select('posts.*',DB::raw('count(comments.id) as comments_count'))
+//                ->on('posts.id=comments.post_id')
+                ->where('posts.deleted','=','0')
+                ->groupBy('comments.post_id')
+//                ->groupBy('posts.id')
+//                ->groupBy('posts.user_id')
+//                ->groupBy('posts.title')
+//                ->groupBy('posts.article')
+//                ->groupBy('posts.deleted')
+//                ->groupBy('posts.created_at')
+//                ->groupBy('posts.updated_at')
+//                ->havingRaw('posts.id,posts.user_id')
+                ->orderBy('posts.id','desc')
+                ->get();
+//        $comments=DB::table('comments')
+//                ->select('count(id) as comments_count')
+//                ->groupBy('post_id');
+//        $posts= DB::table('posts')
+////                ->select(DB::raw('posts.*, count(comments.id)'))
+////                ->from('posts')
+////                ->join('comments','posts.id','=','comments.post_id')
+//                ->select('*')
+////                ->select('posts.*',DB::raw('count(comments.id) as comments_count'))
+////                ->on('posts.id=comments.post_id')
+//                ->where('deleted','=','0')
+////                ->groupBy('posts.id')
+////                ->groupBy('posts.user_id')
+////                ->groupBy('posts.title')
+////                ->groupBy('posts.article')
+////                ->groupBy('posts.deleted')
+////                ->groupBy('posts.created_at')
+////                ->groupBy('posts.updated_at')
+////                ->havingRaw('posts.id,posts.user_id')
+//                ->orderBy('id','desc')
+//                ->union($comments)
+//                ->get();
+//        SELECT `posts`.*,COUNT(`comments`.`id`) as comments_count 
+//        FROM `posts` 
+//        JOIN `comments` 
+//        ON `posts`.`id`=`comments`.`post_id` 
+//        WHERE `posts`.`deleted`=0 GROUP BY post_id ORDER BY `posts`.`id` DESC
+//        $posts = DB::table('comments')
+//                ->join('posts','comments.post_id','=','posts.id')
+//                ->groupBy('comments.id')
+//                ->orderBy('posts.id','desc')
+//                ->get(['posts.*',DB::raw('COUNT(comments.id) as num')]);
+       dd($posts);
+        return view('posts.index', [
+            'posts' => $posts,
         ]);
     }
-    
-    public function add()
-    {
+
+    /**
+     * Shows a form for adding new Posts
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function add() {
         return view('posts.add');
     }
-    
+
+    /**
+     * Shows post by $id
+     * 
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     * 
+     * @throws NotFoundHttpException
+     */
     public function show($id) {
-        
+
         $post = Post::find($id);
-        return view('posts.show',['post'=> $post]);
-        
+        if (!isset($post)) {
+            throw new NotFoundHttpException('Sorry, but we cant find that article...');
+        }
+
+        return view('posts.show', ['post' => $post]);
     }
-    public function store(Request $request)
-    {
-    
-        $this->validate($request,[
+
+    /**
+     * Saves post from request
+     * 
+     * @param Request $request
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request) {
+
+        $this->validate($request, [
             'title' => 'required|max:50',
-            'article'=>'required|min:20'
+            'article' => 'required|min:20'
         ]);
-        
+
         $request->user()->posts()->create([
-            'title'=>$request->title,
-            'article'=>$request->article
+            'title' => $request->title,
+            'article' => $request->article
         ]);
+
+        return redirect()->route('post.index');
+    }
+
+    /**
+     * Delete post by $id
+     * 
+     * @param int $id
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($id) {
+        $post = Post::find($id);
+        If (Auth::user()->role != 'admin') {
+
+            if ($post->user_id !== Auth::user()->id) {
+                return redirect()->route('post.index')->withErrors('Sorry, but you are not the owner of this article.');
+            }
+
+            $createdAt = strtotime(date($post->created_at));
+            $differenceInTime = time() - $createdAt;
+            if ($differenceInTime > 3600){
+                return redirect()->route('post.index')->withErrors('Sorry, but you can delete post only for 1 hour.');
+            }
+        }
+        
+        $post->deleted = 1;
+        $post->save();
         
         return redirect()->route('post.index');
-        
     }
+
 }
