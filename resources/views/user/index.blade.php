@@ -2,7 +2,7 @@
 @section('title','Personal page')
 @section('content')
 <div class='container'>
-    <div class="row">
+    <div class="row" >
         <div class="col-md-4 col-md-offset-4" id="message-profile"></div>
     </div>
     <div class="row">
@@ -12,9 +12,19 @@
     </div>
     <div class="row">
         <div class="col-md-2 col-md-offset-3">
-            Avatar
+            <!--uploading image-->
+<!--        <form enctype="multipart/form-data" method="post" action="/profile/update/">
+
+                {{ csrf_field() }}
+                <img                            src="{{$user->avatara}}">
+                <div id="avatara">
+                    <input type="file" name="avatar" />
+                </div>
+                <input type="submit" name="submit">
+            </form>-->
+            <img src="{{$user->avatara}}">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 profile-data">
             <div id="name">
                 Name:<input type="text" class="data" value="{{$user->name}}"/>
             </div>
@@ -28,7 +38,7 @@
                 Role:{{$user->role}}
             </div>
             <div id="activity">
-                Activity:{{$user->posts->count()}}
+                Activity:<a href="/posts/{{$user->nick_name}}">{{$user->posts->count()}}</a>
             </div>
             <div id='b-date'>
                 Birthdate:
@@ -62,5 +72,5 @@
 @endsection
 
 @section('scripts')
-<script src='/public/js/profile.js'></script>
+    <script src='/public/js/profile.js'></script>
 @endsection
