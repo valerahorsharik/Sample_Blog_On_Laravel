@@ -43,61 +43,18 @@ class PostController extends Controller {
                 throw new NotFoundHttpException('No such user!');
             }
         }
-        $posts = Post::all()
-                ->where('deleted',0)
-                ->sortByDesc('id');
+//        $posts = Post::all()
+//                ->where('deleted',0)
+//                ->sortByDesc('id');
+//        dd($posts);123
         $posts= DB::table('posts')
-//                ->select(DB::raw('posts.*, count(comments.id)'))
-//                ->from('posts')
                 ->join('comments','posts.id','=','comments.post_id')
-                ->select(DB::raw('`posts`.*, count(`comments`.`id`) as comments_count,comments.post_id'))
-//                ->select('posts.*',DB::raw('count(comments.id) as comments_count'))
-//                ->on('posts.id=comments.post_id')
+                ->select(DB::raw('`posts`.*, count(`comments`.`post_id`) as comments_count,comments.post_id'))
                 ->where('posts.deleted','=','0')
-                ->groupBy('comments.post_id')
-//                ->groupBy('posts.id')
-//                ->groupBy('posts.user_id')
-//                ->groupBy('posts.title')
-//                ->groupBy('posts.article')
-//                ->groupBy('posts.deleted')
-//                ->groupBy('posts.created_at')
-//                ->groupBy('posts.updated_at')
-//                ->havingRaw('posts.id,posts.user_id')
+                ->groupBy('posts.id')
                 ->orderBy('posts.id','desc')
                 ->get();
-//        $comments=DB::table('comments')
-//                ->select('count(id) as comments_count')
-//                ->groupBy('post_id');
-//        $posts= DB::table('posts')
-////                ->select(DB::raw('posts.*, count(comments.id)'))
-////                ->from('posts')
-////                ->join('comments','posts.id','=','comments.post_id')
-//                ->select('*')
-////                ->select('posts.*',DB::raw('count(comments.id) as comments_count'))
-////                ->on('posts.id=comments.post_id')
-//                ->where('deleted','=','0')
-////                ->groupBy('posts.id')
-////                ->groupBy('posts.user_id')
-////                ->groupBy('posts.title')
-////                ->groupBy('posts.article')
-////                ->groupBy('posts.deleted')
-////                ->groupBy('posts.created_at')
-////                ->groupBy('posts.updated_at')
-////                ->havingRaw('posts.id,posts.user_id')
-//                ->orderBy('id','desc')
-//                ->union($comments)
-//                ->get();
-//        SELECT `posts`.*,COUNT(`comments`.`id`) as comments_count 
-//        FROM `posts` 
-//        JOIN `comments` 
-//        ON `posts`.`id`=`comments`.`post_id` 
-//        WHERE `posts`.`deleted`=0 GROUP BY post_id ORDER BY `posts`.`id` DESC
-//        $posts = DB::table('comments')
-//                ->join('posts','comments.post_id','=','posts.id')
-//                ->groupBy('comments.id')
-//                ->orderBy('posts.id','desc')
-//                ->get(['posts.*',DB::raw('COUNT(comments.id) as num')]);
-       dd($posts);
+        dd($posts);
         return view('posts.index', [
             'posts' => $posts,
         ]);
