@@ -21,14 +21,14 @@
                 @endif
             </div>
             <div class="col-md-4  col-md-offset-6 text-right">
-                Author:{{$post->user->name}}
+                Author:{{$post->author}}
             </div>
 
         </div>
         
         <div class="row">
             <div class="col-md-2 col-md-offset-5" data-post-id="{{$post->id}}">
-                
+                {{($post->comments_count > 0)?$post->comments_count:''}}
             </div>
         
         </div>
