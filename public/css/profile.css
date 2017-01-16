@@ -1,0 +1,23 @@
+
+input.data{
+    margin-left:10px; 
+    border:none;
+    background: transparent;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 20px;
+}
+input.data:focus{
+    background: white;
+}
+
+#message-profile{
+    position:absolute;
+}
+.profile-data{
+    margin-left: 20px;
+}
+input.data.error{
+    border: 1px solid red;
+}

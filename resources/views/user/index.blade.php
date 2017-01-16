@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('title','Personal page')
+@section('styles')
+    <link href="/public/css/profile.css" rel="stylesheet">
+@endsection
 @section('content')
 <div class='container'>
     <div class="row" >
