@@ -43,18 +43,15 @@ class PostController extends Controller {
                 throw new NotFoundHttpException('No such user!');
             }
         }
-//        $posts = Post::all()
-//                ->where('deleted',0)
-//                ->sortByDesc('id');
-//        dd($posts);123
         $posts= DB::table('posts')
-                ->join('comments','posts.id','=','comments.post_id')
-                ->select(DB::raw('`posts`.*, count(`comments`.`post_id`) as comments_count,comments.post_id'))
+                ->leftJoin('comments','posts.id','=','comments.post_id')
+                ->join('users','users.id','=','posts.user_id')
+                ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
                 ->where('posts.deleted','=','0')
                 ->groupBy('posts.id')
                 ->orderBy('posts.id','desc')
                 ->get();
-        dd($posts);
+//        dd($posts);
         return view('posts.index', [
             'posts' => $posts,
         ]);
