@@ -8,12 +8,16 @@ use App\Post;
 use App\Comment;
 use App\Http\Requests;
 
-class CommentController extends Controller
-{
-    public function index($id) {
-        $comments = Comment::all()->where('post_id',$id);
-        return view('comment.index',[
-            'comments'=>$comments
-        ]);
+class CommentController extends Controller {
+
+    public function index(Request $request) {
+        if ($request->ajax()) {
+            $comments = Comment::all()->where('post_id', $request->id);
+            return view('comments.index', [
+                'comments' => $comments
+            ]);
+        }
+        return redirect()->route('post.index')->withErrors('Sorry, but you are doing wrong...');
     }
+
 }
