@@ -10,3 +10,15 @@
 .post{
     word-wrap: break-word;
 }
+.toggle-comments{
+    user-select:none;
+    cursor: pointer;
+    text-align: center;
+    font-size:13px;
+}
+.toggle-comments + .comments{
+    display: none;
+}
+.toggle-comments.active + .comments{
+    display:block;
+}

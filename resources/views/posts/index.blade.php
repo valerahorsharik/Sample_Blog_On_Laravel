@@ -23,14 +23,15 @@
             <div class="col-md-4  col-md-offset-6 text-right">
                 Author:{{$post->author}}
             </div>
-
         </div>
-        
-        <div class="row">
-            <div class="col-md-2 col-md-offset-5" data-post-id="{{$post->id}}">
-                {{($post->comments_count > 0)?$post->comments_count:''}}
+        <div class="row"> 
+            <div class="download-comments toggle-comments"  data-post-id="{{$post->id}}">
+               @if ($post->comments_count > 0)
+                   Show comments
+               @else
+                   Add comment
+               @endif 
             </div>
-        
         </div>
             
     </div>
