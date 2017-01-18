@@ -28,6 +28,9 @@
     border: 3.75px solid transparent;
     border-top: 5.625px solid #777;
 }
+/*
+COMMENTS style(divide it into a new file)
+*/
 .toggle-comments{
     user-select:none;
     cursor: pointer;
@@ -39,4 +42,16 @@
 }
 .toggle-comments.active + .comments{
     display:block;
+}
+
+.comments-form textarea{
+    width:70%;
+    resize: none;
+    overflow-y:visible;
+    float: left;
+    border:none;
+}
+.comments-form textarea:focus{
+    border: none;
+    outline: none;
 }
