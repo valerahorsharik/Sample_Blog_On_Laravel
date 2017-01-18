@@ -20,19 +20,14 @@
                     @endif
                 @endif
             </div>
-            <div class="col-md-4  col-md-offset-6 text-right">
+            <div class="col-md-2 col-md-offset-3 text-center">
+                <div class="comments-icon"></div> {{$post->comments_count}}
+            </div>
+            <div class="col-md-4  col-md-offset-1 text-right">
                 Author:{{$post->author}}
             </div>
         </div>
-        <div class="row"> 
-            <div class="download-comments toggle-comments"  data-post-id="{{$post->id}}">
-               @if ($post->comments_count > 0)
-                   Show comments
-               @else
-                   Add comment
-               @endif 
-            </div>
-        </div>
+       
             
     </div>
 
