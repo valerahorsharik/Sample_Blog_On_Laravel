@@ -13,17 +13,19 @@
         <div class="row">{{$post->article}}</div>
         <div class="row">
             <div class="col-md-2 options">
+                <span class="glyphicon glyphicon-comment"></span> {{$post->comments_count}}
                 @if(Auth::check())
                     @if ($post->user_id == Auth::user()->id)
-                        <a class="delete_post_href" href="/post/delete/{{$post->id}}">x</a>
-                        <a class="delete_post_href" href="/post/edit/{{$post->id}}">u</a>
+                        <a href="/post/delete/{{$post->id}}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        <a href="/post/edit/{{$post->id}}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
                     @endif
                 @endif
             </div>
-            <div class="col-md-2 col-md-offset-3 text-center">
-                <span class="glyphicon glyphicon-comment"></span> {{$post->comments_count}}
-            </div>
-            <div class="col-md-4  col-md-offset-1 text-right">
+            <div class="col-md-4  col-md-offset-6 text-right">
                 Author:{{$post->author}}
             </div>
         </div>         
