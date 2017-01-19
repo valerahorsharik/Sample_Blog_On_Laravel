@@ -7,6 +7,9 @@
 .options {
     padding-left: 0px;
 }
+.options a:hover{
+    text-decoration: none;
+}
 .post{
     word-wrap: break-word;
 }
