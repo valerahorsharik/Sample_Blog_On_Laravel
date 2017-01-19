@@ -22,7 +22,7 @@ Route::get('/post/delete/{id}',['uses'=>'PostController@delete', 'as' => 'post.d
 
 //Comments Routes...
 Route::post('/comments', ['uses'=>'CommentController@index', 'as'=>'comment.index']);
-
+Route::post('/comment/save', ['uses'=>'CommentController@store', 'as'=>'comment.save']);
 
 
 // User Routes...
