@@ -21,7 +21,7 @@
                 @endif
             </div>
             <div class="col-md-2 col-md-offset-3 text-center">
-                <div class="comments-icon"></div> {{$post->comments_count}}
+                <span class="glyphicon glyphicon-comment"></span> {{$post->comments_count}}
             </div>
             <div class="col-md-4  col-md-offset-1 text-right">
                 Author:{{$post->author}}

@@ -10,24 +10,10 @@
 .post{
     word-wrap: break-word;
 }
+.glyphicon{
+    top:3px;
+}
 
-.comments-icon {
-    display: inline-block;
-    width: 15px;
-    height: 11.25px;
-    position: relative;
-    border-radius: 1.875px;
-    background: #777;
-    margin-top: 5px;
-}
-.comments-icon:before {
-    content: ""; 
-    position: absolute;
-    top: 9.375px;
-    left: 1.875px; 
-    border: 3.75px solid transparent;
-    border-top: 5.625px solid #777;
-}
 /*
 COMMENTS style(divide it into a new file)
 */
