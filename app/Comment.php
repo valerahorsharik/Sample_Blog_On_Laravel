@@ -12,7 +12,8 @@ class Comment extends Model
      * @var array
      */
     protected $fillable = [
-        'comment',
+        'text',
+        'post_id',
     ];
     
      public function user() {
@@ -25,5 +26,9 @@ class Comment extends Model
         
         return $this->belongsTo(Post::class);
         
+    }
+    
+    public function setUpdatedAt($value) {
+        return $this;
     }
 }
