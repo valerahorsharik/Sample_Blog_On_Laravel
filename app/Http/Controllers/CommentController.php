@@ -28,16 +28,17 @@ class CommentController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request){
+        if ($request->ajax()) {
+            $this->validate($request, [
+                'text' => 'required|min:5' 
+            ]);
         
-        $this->validate($request, [
-           'text' => 'required|min:5' 
-        ]);
-        
-        $request->user()->comments()->create([
-           'text' => $request->text,
-            'post_id' => $request->id,
-        ]);
-        
-        return redirect()->back();
+            $request->user()->comments()->create([
+               'text' => $request->text,
+               'post_id' => $request->id,
+            ]);
+        }
+
+        return redirect()->route('post.index')->withErrors('Sorry, but you are doing wrong...');
     }
 }
