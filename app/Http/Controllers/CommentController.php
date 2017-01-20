@@ -28,9 +28,14 @@ class CommentController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request){
+        
+        $this->validate($request, [
+           'text' => 'required|min:5' 
+        ]);
+        
         $request->user()->comments()->create([
            'text' => $request->text,
-            'post_id' => 7
+            'post_id' => $request->id,
         ]);
         
         return redirect()->back();
