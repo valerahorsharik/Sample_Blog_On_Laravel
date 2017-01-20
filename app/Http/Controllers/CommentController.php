@@ -30,11 +30,11 @@ class CommentController extends Controller {
     public function store(Request $request){
         if ($request->ajax()) {
             $this->validate($request, [
-                'text' => 'required|min:5' 
+                'comment' => 'required|min:5' 
             ]);
         
             $request->user()->comments()->create([
-               'text' => $request->text,
+               'comment' => $request->comment,
                'post_id' => $request->id,
             ]);
         }

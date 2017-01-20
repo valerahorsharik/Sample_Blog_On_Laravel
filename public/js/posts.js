@@ -46,21 +46,22 @@ $(document).ready(function () {
  */
 $(document).on('submit', '.comments-form', function () {
     var postId = $(this).closest('.comments').siblings('.toggle-comments').data('post-id');
-    var text = $(this).children('textarea').val();
+    var comment = $(this).children('textarea').val();
     $.ajax({
         type: "POST",
         url: "/comment/save",
         context: $(this),
         data:{
             id:postId,
-            text:text
+            comment:comment
         },
         error:function(error){
+            console.log(error.responseText);
             console.log(error.responseJSON);
         },
         success:function(){
             $(this).siblings('.comments-list').prepend(
-                    '<li data-comment-id="' + postId +'">' + text + "</li>"
+                    '<li data-comment-id="' + postId +'">' + comment + "</li>"
                     );
             $(this).children('textarea').val('');
         }
@@ -68,3 +69,4 @@ $(document).on('submit', '.comments-form', function () {
     });
     return false;
 });
+
