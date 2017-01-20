@@ -22,9 +22,9 @@ $(document).ready(function () {
                 success: function (data) {
                     $(this).parent().append(data);
                 },
-                error: function (e) {
-                    $(this).parent().append('lose');
-                    console.log(e);
+                error: function (error) {
+                    $(this).parent().html('Something broken...');
+                    console.log(error);
                 }
             });
         }
@@ -50,12 +50,19 @@ $(document).on('submit', '.comments-form', function () {
     $.ajax({
         type: "POST",
         url: "/comment/save",
+        context: $(this),
         data:{
             id:postId,
             text:text
         },
+        error:function(error){
+            console.log(error.responseJSON);
+        },
         success:function(){
-            alert('123');
+            $(this).siblings('.comments-list').prepend(
+                    '<li data-comment-id="' + postId +'">' + text + "</li>"
+                    );
+            $(this).children('textarea').val('');
         }
 
     });
