@@ -45,7 +45,7 @@ $(document).ready(function () {
  * Save comment from FORM with class .comments-form
  */
 $(document).on('submit', '.comments-form', function () {
-    var postId = $(this).parent('.comments').sublings('.toggle-comments').data('post-id');
+    var postId = $(this).closest('.comments').siblings('.toggle-comments').data('post-id');
     var text = $(this).children('textarea').val();
     $.ajax({
         type: "POST",
