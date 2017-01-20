@@ -7,13 +7,13 @@ $(document).ready(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
+
     /*
      * Download comments using ajax by postId
      */
     $('.download-comments').on('click', function () {
         if ($(this).parent().find('.comments').length === 0) {
-            var postId = $(this).attr('data-post-id');
+            var postId = $(this).data('post-id');
             $.ajax({
                 type: 'POST',
                 url: '/comments',
@@ -38,4 +38,26 @@ $(document).ready(function () {
             $(this).toggleClass('active');
         }
     });
+
+});
+
+/*
+ * Save comment from FORM with class .comments-form
+ */
+$(document).on('submit', '.comments-form', function () {
+    var postId = $(this).parent('.comments').sublings('.toggle-comments').data('post-id');
+    var text = $(this).children('textarea').val();
+    $.ajax({
+        type: "POST",
+        url: "/comment/save",
+        data:{
+            id:postId,
+            text:text
+        },
+        success:function(){
+            alert('123');
+        }
+
+    });
+    return false;
 });
