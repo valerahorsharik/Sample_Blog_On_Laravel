@@ -1,9 +1,9 @@
 <div class="comments">
     @include('comments.addForm')
     @if (count($comments) > 0)
-    <ul class="comments">
+    <ul class="comments-list">
         @foreach($comments as $comment)
-        <li>
+        <li data-comment-id='{{$comment->id}}'>
             {{$comment->text}}
         </li>
         @endforeach
