@@ -60,11 +60,35 @@ $(document).on('submit', '.comments-form', function () {
         },
         success:function(){
             $(this).siblings('.comments-list').prepend(
-                    '<li data-comment-id="' + postId +'">' + comment + "</li>"
+                    '<li data-comment-id="' + postId +'">' +
+                    comment +
+                    "<span class='glyphicon glyphicon-remove delete-comment'></span></li>"
                     );
             $(this).children('textarea').val('');
         }
 
     });
     return false;
+});
+
+/*
+ * Delete "clicked" comment from .comments-list by comment-id
+ */
+$(document).on('click','.comments-list .delete-comment',function(){
+    var commentId = $(this).parent().data('comment-id');
+    $.ajax({
+        type: "post",
+        url: "/comment/delete",
+        context:$(this).parent(),
+        data:{
+            _method: 'delete',
+            id:commentId
+        },
+        error:function(error){
+            console.log(error.responseText);
+        },
+        success:function(){
+            $(this).html("Deleted");
+        }
+    });
 });

@@ -4,7 +4,7 @@
     <ul class="comments-list">
         @foreach($comments as $comment)
         <li data-comment-id='{{$comment->id}}'>
-            {{$comment->text}}
+            {{$comment->comment}}<span class='glyphicon glyphicon-remove delete-comment'></span>
         </li>
         @endforeach
     </ul>

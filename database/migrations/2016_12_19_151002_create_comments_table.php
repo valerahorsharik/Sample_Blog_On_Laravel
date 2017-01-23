@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->integer('post_id')->index();
             $table->integer('user_id')->index();
             $table->text('comment');
+            $table->tinyInteger('deleted',1)->default(0);
             $table->timestamp('created_at');
         });
     }
