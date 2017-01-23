@@ -4,7 +4,10 @@
     <ul class="comments-list">
         @foreach($comments as $comment)
         <li data-comment-id='{{$comment->id}}'>
-            {{$comment->comment}}<span class='glyphicon glyphicon-remove delete-comment'></span>
+            {{$comment->comment}}
+            @if($comment->user_id == Auth::user()->id)
+                <span class='glyphicon glyphicon-remove delete-comment'></span>
+            @endif
         </li>
         @endforeach
     </ul>

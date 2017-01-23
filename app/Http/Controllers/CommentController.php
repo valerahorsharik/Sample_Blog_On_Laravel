@@ -7,6 +7,7 @@ use App\User;
 use App\Post;
 use App\Comment;
 use App\Http\Requests;
+use \Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller {
 
@@ -58,13 +59,17 @@ class CommentController extends Controller {
      * 
      * @param Request $request
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function delete(Request $request) {
         if ($request->ajax()) {
             $comment  = Comment::find($request->id);
-            $comment->deleted = 1;
-            $comment->save();
+            if($comment->user_id == Auth::user()->id){
+                $comment->deleted = 1;
+                $comment->save();
+                return response("Deleted successfully", 200);
+            }
+            return response("Sorry, but you are not owner of the comment.", 403);
         }
         return redirect()->route('post.index')->withErrors('Sorry, but you are doing wrong...');
     }
