@@ -14,6 +14,7 @@ class Comment extends Model
     protected $fillable = [
         'comment',
         'post_id',
+        'created_at',
     ];
     
     public $timestamps = false;
