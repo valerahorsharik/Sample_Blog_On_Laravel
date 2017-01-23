@@ -39,7 +39,6 @@ class CommentController extends Controller {
      */
     public function store(Request $request){
         if ($request->ajax()) {
-            $this->
             $this->validate($request, [
                 'comment' => 'required|min:5' 
             ]);
