@@ -52,7 +52,6 @@ class PostController extends Controller {
                 ->groupBy('posts.id')
                 ->orderBy('posts.id','desc')
                 ->get();
-//        dd($posts);
         return view('posts.index', [
             'posts' => $posts,
         ]);
