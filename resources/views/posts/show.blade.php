@@ -14,8 +14,12 @@ Post {{$post->title}}
             <div class="col-md-2 options">
                 @if(Auth::check())
                     @if ($post->user_id == Auth::user()->id)
-                        <a class="delete_post_href" href="/post/delete/{{$post->id}}">x</a>
-                        <a class="delete_post_href" href="/post/edit/{{$post->id}}">u</a>
+                        <a class="delete_post_href" href="/post/delete/{{$post->id}}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        <a class="delete_post_href" href="/post/edit/{{$post->id}}">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
                     @endif
                 @endif
             </div>
