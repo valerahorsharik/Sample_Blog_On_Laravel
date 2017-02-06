@@ -49,6 +49,7 @@ class PostController extends Controller {
                 ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
                 ->where('posts.deleted','=','0')
                 ->where('comments.deleted','=','0')
+                ->orWhere('comments.deleted','=',NULL)
                 ->groupBy('posts.id')
                 ->orderBy('posts.id','desc')
                 ->get();

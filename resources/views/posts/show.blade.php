@@ -29,10 +29,10 @@ Post {{$post->title}}
         </div>
         <div class="row"> 
             <div class="download-comments toggle-comments"  data-post-id="{{$post->id}}">
-                @if ($post->comments_count > 0)
-                    Show comments
+                @if (count($post->comments) > 0)
+                    Show comments.
                 @else
-                    Add first comment
+                    Add first comment.
                 @endif 
             </div>
         </div>

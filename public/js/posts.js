@@ -24,7 +24,7 @@ $(document).ready(function () {
                 },
                 error: function (error) {
                     $(this).parent().html('Something broken...');
-                    console.log(error);
+                    console.log(error.responseText);
                 }
             });
         }
@@ -35,7 +35,8 @@ $(document).ready(function () {
      */
     $('.toggle-comments').on('click', function () {
         if (!$(this).hasClass('download-comments')) {
-            $(this).toggleClass('active');
+            $(this).toggleClass('active'); 
+            $(this).html($(this).html() == "Hide comments." ? "Show comments." : "Hide comments.");
         }
     });
 
@@ -59,6 +60,7 @@ $(document).on('submit', '.comments-form', function () {
             console.log(error.responseJSON);
         },
         success:function(){
+            $(this).parent().siblings(".toggle-comments").html('Hide comments.')
             $(this).siblings('.comments-list').prepend(
                     '<li data-comment-id="' + postId +'">' +
                     comment +
