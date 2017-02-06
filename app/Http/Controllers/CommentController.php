@@ -16,14 +16,14 @@ class CommentController extends Controller {
      * 
      * @param Request $request
      * 
-     * @return \Illuminate\Http\Response
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function index(Request $request) {
         if ($request->ajax()) {
-            $comments = Comment::all()
-                    ->where('post_id', $request->id)
-                    ->where('deleted',0);
+            $comments = Comment::where('post_id', $request->id)
+                    ->where('deleted',0)
+                    ->orderBy('id','desc')
+                    ->get();
             return view('comments.index', [
                 'comments' => $comments
             ]);

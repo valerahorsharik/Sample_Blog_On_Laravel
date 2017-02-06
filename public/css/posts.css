@@ -1,3 +1,6 @@
+/*
+POST style
+*/
 .post{
     border-bottom: 1px solid #eee;
 }
@@ -18,7 +21,7 @@
 }
 
 /*
-COMMENTS style(divide it into a new file)
+COMMENTS style
 */
 .toggle-comments{
     user-select:none;
@@ -33,6 +36,13 @@ COMMENTS style(divide it into a new file)
     display:block;
 }
 
+.comments-form:after{
+    content:'';
+    display:block;
+    clear:both;
+    height: 0px;
+    visibility: hidden;
+}
 .comments-form textarea{
     width:70%;
     resize: none;
@@ -40,7 +50,62 @@ COMMENTS style(divide it into a new file)
     float: left;
     border:none;
 }
-.comments-form textarea:focus{
+.comments-form textarea:focus,.comments-form input[type=submit]:focus{
     border: none;
     outline: none;
+}
+
+.comments-form input[type="submit"]{
+    margin-top: 9px;
+    margin-left: 15px;
+    border-radius: 25px;
+    border: none;
+    padding: 15px;
+}
+
+.comments-form input[type="submit"]:hover{
+    color:lightgrey;
+    background-color: #929AA5;
+}
+
+.comments-form input[type="submit"]:active{
+    color:lightgrey;
+    background-color: #636E7C;
+}
+.comments-list{
+    list-style-type: none;
+}
+
+.comments-list{
+    padding-left: 5px;
+}
+
+.comments-list li{
+    margin-top:15px;
+}
+.comments-list li .comment-text{
+    text-indent: 20px;
+}
+
+.comment-info .info{
+    float:left;
+    font-weight: bold;
+    font-style: italic;
+}
+.comment-info .actions{
+    text-align: right;
+    display:none;
+}
+.comments-list li:hover .actions{
+    display: block;
+}
+.comment-info:after{
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.delete-comment{
+    cursor:pointer;
 }
