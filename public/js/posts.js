@@ -89,7 +89,7 @@ $(document).on('submit', '.comments-form', function () {
  * Delete "clicked" comment from .comments-list by comment-id
  */
 $(document).on('click', '.comments-list .delete-comment', function () {
-    var commentId = $(this).parent().data('comment-id');
+    var commentId = $(this).closest('li').data('comment-id');
     $.ajax({
         type: "post",
         url: "/comment/delete",
