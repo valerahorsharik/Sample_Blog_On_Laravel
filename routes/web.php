@@ -15,7 +15,8 @@ Route::get('/', ['uses'=>'PostController@index' , 'as'=>'post.index']);
 
 // Article Routes...
 Route::get('/posts/add',['uses'=>'PostController@add' , 'as'=>'post.add']);
-Route::get('/posts/{nickName?}',['uses'=>'PostController@index' , 'as'=>'post.index']);
+Route::get('/posts/',['uses'=>'PostController@index' , 'as'=>'post.index']);
+Route::get('/posts/{nickName}',['uses'=>'PostController@showPostsByNickName' , 'as'=>'post.usersPost']);
 Route::post('/post',['uses'=>'PostController@store', 'as'=>'post.store']);
 Route::get('/post/{id}',['uses'=>'PostController@show', 'as'=>'post.show']);
 Route::get('/post/delete/{id}',['uses'=>'PostController@delete', 'as' => 'post.delete']);
@@ -47,4 +48,3 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::get('/home', 'HomeController@index');
