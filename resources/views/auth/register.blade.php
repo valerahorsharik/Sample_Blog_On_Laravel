@@ -28,11 +28,24 @@
                             <label for="surname" class="col-md-4 control-label">Surname</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="surname" value="{{ old('surname') }}" required autofocus>
+                                <input id="name" type="text" class="form-control" name="surname" value="{{ old('surname') }}" required>
 
                                 @if ($errors->has('surname'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('surname') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('nick_name') ? ' has-error' : '' }}">
+                            <label for="surname" class="col-md-4 control-label">Nickname</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control" name="nick_name" value="{{ old('nick_name') }}" required >
+
+                                @if ($errors->has('nick_name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('nick_name') }}</strong>
                                     </span>
                                 @endif
                             </div>
