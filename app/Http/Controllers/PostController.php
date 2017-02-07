@@ -33,8 +33,10 @@ class PostController extends Controller {
                 ->join('users', 'users.id', '=', 'posts.user_id')
                 ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
                 ->where('posts.deleted', '=', '0')
-                ->where('comments.deleted', '=', '0')
-                ->orWhere('comments.deleted', '=', NULL)
+                ->where(function($query){
+                    $query->where( 'comments.deleted', '=', '0')
+                    ->orWhere('comments.deleted', '=', NULL);
+                })
                 ->groupBy('posts.id')
                 ->orderBy('posts.id', 'desc')
                 ->get();
@@ -57,9 +59,11 @@ class PostController extends Controller {
                 ->join('users', 'users.id', '=', 'posts.user_id')
                 ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
                 ->where('posts.deleted', '=', '0')
-                ->where('comments.deleted', '=', '0')
+                ->where(function($query){
+                    $query->where( 'comments.deleted', '=', '0')
+                    ->orWhere('comments.deleted', '=', NULL);
+                })
                 ->where('users.nick_name','=', $nickName)
-//                ->orWhere('comments.deleted', '=', NULL)
                 ->groupBy('posts.id')
                 ->orderBy('posts.id', 'desc')
                 ->get();
