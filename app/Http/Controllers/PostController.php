@@ -23,39 +23,52 @@ class PostController extends Controller {
     }
 
     /**
-     * Show all posts if $nickName is null ,
-     * and otherwise show all posts which belongs
-     * to the user with $nickName.
+     * Show all posts 
      * 
-     * @param string $nickName
      * @return \Illuminate\Http\Response
-     * 
-     * @throws NotFoundHttpException
      */
-    public function index($nickName = null) {
-        if (isset($nickName)) {
-            try {
-                $posts = User::where('nick_name', $nickName)->first()->posts;
-                return view('posts.index', [
-                    'posts' => $posts,
-                ]);
-            } catch (\ErrorException $ex) {
-                throw new NotFoundHttpException('No such user!');
-            }
-        }
-        $posts= DB::table('posts')
-                ->leftJoin('comments','posts.id','=','comments.post_id')
-                ->join('users','users.id','=','posts.user_id')
+    public function index() {
+        $posts = DB::table('posts')
+                ->leftJoin('comments', 'posts.id', '=', 'comments.post_id')
+                ->join('users', 'users.id', '=', 'posts.user_id')
                 ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
-                ->where('posts.deleted','=','0')
-                ->where('comments.deleted','=','0')
-                ->orWhere('comments.deleted','=',NULL)
+                ->where('posts.deleted', '=', '0')
+                ->where('comments.deleted', '=', '0')
+                ->orWhere('comments.deleted', '=', NULL)
                 ->groupBy('posts.id')
-                ->orderBy('posts.id','desc')
+                ->orderBy('posts.id', 'desc')
                 ->get();
         return view('posts.index', [
             'posts' => $posts,
         ]);
+    }
+
+    /**
+     * Shows all posts that belong to the user with $nickName
+     * 
+     * @param string $nickName
+     * @return \Illuminate\Http\Response
+     * @throws NotFoundHttpException
+     */
+    public function showPostsByNickName($nickName) {
+        try {
+           $posts = DB::table('posts')
+                ->leftJoin('comments', 'posts.id', '=', 'comments.post_id')
+                ->join('users', 'users.id', '=', 'posts.user_id')
+                ->select(DB::raw('`posts`.*, `users`.`name` as author, count(`comments`.`post_id`) as comments_count'))
+                ->where('posts.deleted', '=', '0')
+                ->where('comments.deleted', '=', '0')
+                ->where('users.nick_name','=', $nickName)
+//                ->orWhere('comments.deleted', '=', NULL)
+                ->groupBy('posts.id')
+                ->orderBy('posts.id', 'desc')
+                ->get();
+            return view('posts.index', [
+                'posts' => $posts,
+            ]);
+        } catch (\ErrorException $ex) {
+            throw new NotFoundHttpException('No such user!');
+        }
     }
 
     /**
@@ -124,14 +137,14 @@ class PostController extends Controller {
 
             $createdAt = strtotime(date($post->created_at));
             $differenceInTime = time() - $createdAt;
-            if ($differenceInTime > 3600){
+            if ($differenceInTime > 3600) {
                 return redirect()->route('post.index')->withErrors('Sorry, but you can delete post only for 1 hour.');
             }
         }
-        
+
         $post->deleted = 1;
         $post->save();
-        
+
         return redirect()->route('post.index');
     }
 
