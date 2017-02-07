@@ -6,6 +6,11 @@
 @section('content')
 @include('errors.errors')
 <div class="container posts-main-container">
+    @if(count($posts) == 0)
+    <div class="col-md-4 col-md-offset-4 text-center">
+        Here is no articles.
+    </div>
+    @endif
     @foreach($posts as $post)
 
     <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 post">
