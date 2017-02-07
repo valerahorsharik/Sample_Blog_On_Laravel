@@ -35,7 +35,7 @@ $(document).ready(function () {
      */
     $('.toggle-comments').on('click', function () {
         if (!$(this).hasClass('download-comments')) {
-            $(this).toggleClass('active'); 
+            $(this).toggleClass('active');
             $(this).html($(this).html() == "Hide comments." ? "Show comments." : "Hide comments.");
         }
     });
@@ -44,6 +44,7 @@ $(document).ready(function () {
 
 /*
  * Save comment from FORM with class .comments-form
+ * 
  */
 $(document).on('submit', '.comments-form', function () {
     var postId = $(this).closest('.comments').siblings('.toggle-comments').data('post-id');
@@ -52,19 +53,30 @@ $(document).on('submit', '.comments-form', function () {
         type: "POST",
         url: "/comment/save",
         context: $(this),
-        data:{
-            id:postId,
-            comment:comment
+        data: {
+            id: postId,
+            comment: comment
         },
-        error:function(error){
+        error: function (error) {
             console.log(error.responseJSON);
         },
-        success:function(){
+        success: function (data) {
+            /*
+             * Displays saved comment in the top of the .comment-list
+             */
             $(this).parent().siblings(".toggle-comments").html('Hide comments.')
             $(this).siblings('.comments-list').prepend(
-                    '<li data-comment-id="' + postId +'">' +
-                    comment +
-                    "<span class='glyphicon glyphicon-remove delete-comment'></span></li>"
+                    '<li data-comment-id="'+data.comment_id +'">\n\
+                        <div class="comment-info">\n\
+                            <div class="info">' + data.author + ' ' + data.created_at + '</div>\n\
+                            <div class="actions">\n\
+                                <span class=\'glyphicon glyphicon-remove delete-comment\'></span>\n\
+                            </div>\n\
+                        </div>\n\
+                        <div class="comment-text">'
+                            + data.comment +
+                        '</div>\n\
+                    </li>'
                     );
             $(this).children('textarea').val('');
         }
@@ -76,20 +88,20 @@ $(document).on('submit', '.comments-form', function () {
 /*
  * Delete "clicked" comment from .comments-list by comment-id
  */
-$(document).on('click','.comments-list .delete-comment',function(){
+$(document).on('click', '.comments-list .delete-comment', function () {
     var commentId = $(this).parent().data('comment-id');
     $.ajax({
         type: "post",
         url: "/comment/delete",
-        context:$(this).parent(),
-        data:{
+        context: $(this).parent(),
+        data: {
             _method: 'delete',
-            id:commentId
+            id: commentId
         },
-        error:function(error){
+        error: function (error) {
             console.log(error.responseText);
         },
-        success:function(){
+        success: function () {
             $(this).html("Deleted");
         }
     });

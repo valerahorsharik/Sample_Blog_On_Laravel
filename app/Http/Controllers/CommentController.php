@@ -33,10 +33,11 @@ class CommentController extends Controller {
     
     /**
      * Saves comment from request
+     * and return info about the saved comment
      * 
      * @param Request $request
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function store(Request $request){
         if ($request->ajax()) {
@@ -44,11 +45,17 @@ class CommentController extends Controller {
                 'comment' => 'required|min:5' 
             ]);
             $timeNow = Date('Y-m-d H:i:s');
-            $request->user()->comments()->create([
+            $comment = $request->user()->comments()->create([
                'comment' => $request->comment,
                'post_id' => $request->id,
                'created_at' => $timeNow
             ]);
+            return response()->json([
+                'author' => $request->user()->name,
+                'comment' => $request->comment,
+                'comment_id' => $comment->id,
+                'created_at' => $timeNow
+            ],200);
         }
 
         return redirect()->route('post.index')->withErrors('Sorry, but you are doing wrong...');
