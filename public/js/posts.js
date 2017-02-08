@@ -9,7 +9,7 @@ $(document).ready(function () {
     });
 
     /*
-     * Download comments using ajax by postId
+     * Download comments by postId
      */
     $('.download-comments').on('click', function () {
         if ($(this).parent().find('.comments').length === 0) {
@@ -39,8 +39,45 @@ $(document).ready(function () {
             $(this).html($(this).html() == "Hide comments." ? "Show comments." : "Hide comments.");
         }
     });
+    
+    /*
+     * Delete post by postId
+     */
+    $('.delete-post').on('click', function () {
+        var postId = $(this).closest('.post').data('post-id');
+        $.ajax({
+            type: 'POST',
+            url: '/post',
+            data: {
+                _method: 'delete',
+                id: postId
+            },
+            context:$(this).closest('.post'),
+            success: function (data) {
+                $(this).html(data);
+                deleteElement($(this),2);
+            },
+            error: function (error) {
+                $(this).parent().html('Something broken...');
+                console.log(error.responseText);
+            }
+        });
+    });
 
 });
+
+/**
+ * Delete an element after the specified time(in seconds).
+ * 
+ * @param {object} element
+ * @param {int} seconds
+ * @returns {void}
+ */
+function deleteElement(element,seconds){
+   setTimeout(function(){
+       element.remove();}
+   ,seconds*1000);
+}
 
 /*
  * Save comment from FORM with class .comments-form
@@ -66,7 +103,7 @@ $(document).on('submit', '.comments-form', function () {
              */
             $(this).parent().siblings(".toggle-comments").html('Hide comments.')
             $(this).siblings('.comments-list').prepend(
-                    '<li data-comment-id="'+data.comment_id +'">\n\
+                    '<li data-comment-id="' + data.comment_id + '">\n\
                         <div class="comment-info">\n\
                             <div class="info">' + data.author + ' ' + data.created_at + '</div>\n\
                             <div class="actions">\n\
@@ -74,8 +111,8 @@ $(document).on('submit', '.comments-form', function () {
                             </div>\n\
                         </div>\n\
                         <div class="comment-text">'
-                            + data.comment +
-                        '</div>\n\
+                    + data.comment +
+                    '</div>\n\
                     </li>'
                     );
             $(this).children('textarea').val('');

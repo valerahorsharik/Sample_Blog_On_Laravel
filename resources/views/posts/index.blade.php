@@ -13,7 +13,7 @@
     @endif
     @foreach($posts as $post)
 
-    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 post">
+    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 post" data-post-id="{{$post->id}}">
         <div class="row"><a href="/post/{{$post->id}}"><h3>{{$post->title}}</h3></a></div>
         <div class="row">{{$post->article}}</div>
         <div class="row">
@@ -21,12 +21,8 @@
                 <span class="glyphicon glyphicon-comment"></span> {{$post->comments_count}}
                 @if(Auth::check())
                     @if ($post->user_id == Auth::user()->id)
-                        <a href="/post/delete/{{$post->id}}">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                        <a href="/post/edit/{{$post->id}}">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </a>
+                            <span class="glyphicon glyphicon-trash delete-post"></span>
+                            <span class="glyphicon glyphicon-edit  edit-post"></span>
                     @endif
                 @endif
             </div>

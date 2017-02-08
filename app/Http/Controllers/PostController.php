@@ -125,31 +125,24 @@ class PostController extends Controller {
     }
 
     /**
-     * Delete post by $id
+     * Delete post from request
      * 
-     * @param int $id
+     * @param Request $request
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function delete($id) {
-        $post = Post::find($id);
-        If (Auth::user()->role != 'admin') {
-
-            if ($post->user_id !== Auth::user()->id) {
-                return redirect()->route('post.index')->withErrors('Sorry, but you are not the owner of this article.');
+    public function delete(Request $request) {
+        if ($request->ajax()) {
+            $post = Post::find($request->id);
+            if($post->user_id == Auth::user()->id){
+                $post->deleted = 1;
+                $post->save();
+                return response("Deleted successfully", 200);
             }
-
-            $createdAt = strtotime(date($post->created_at));
-            $differenceInTime = time() - $createdAt;
-            if ($differenceInTime > 3600) {
-                return redirect()->route('post.index')->withErrors('Sorry, but you can delete post only for 1 hour.');
-            }
+            return response("Sorry, but you are not owner of the article.", 403);
         }
-
-        $post->deleted = 1;
-        $post->save();
-
-        return redirect()->route('post.index');
+        return redirect()->route('post.index')->withErrors('Sorry, but you are doing wrong...');
+       
     }
 
 }

@@ -7,19 +7,15 @@ Post {{$post->title}}
 @endsection
 @section('content')
 <div class="container">
-    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 post">
+    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 post" data-post-id="{{$post->id}}">
         <div class="row"><h3>{{$post->title}}</h3></div>
         <div class="row">{{$post->article}}</div>
         <div class="row">
             <div class="col-md-2 options">
                 @if(Auth::check())
                     @if ($post->user_id == Auth::user()->id)
-                        <a class="delete_post_href" href="/post/delete/{{$post->id}}">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                        <a class="delete_post_href" href="/post/edit/{{$post->id}}">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </a>
+                            <span class="glyphicon glyphicon-trash delete-post"></span>
+                            <span class="glyphicon glyphicon-edit edit-post" ></span>
                     @endif
                 @endif
             </div>
